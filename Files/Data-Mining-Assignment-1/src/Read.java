@@ -12,26 +12,44 @@ public class Read {
 	public static void main(String[] args) {
 
 		try {
-
+			// Reads the data from the file specified
 			BufferedReader fileIn = new BufferedReader(new FileReader("adult.test.csv"));
 
 			String line;
-			String[][] data = new String[16282][15];
-			int row = 0;
+			// Array List will store the data read from the file
+			ArrayList<String> importData = new ArrayList<String>();
+			int importRowNum = 0;
+			int importColNum = 0;
 
+			// While loop to add each line read to the arraylist & get the number of rows
+			// and columns in the file
 			while ((line = fileIn.readLine()) != null) {
 				if (!line.equals("")) {
-					String[] rowSplit = line.split(",");
+					importData.add(line);
 
-					for (int col = 0; col < 15; col++) {
-						data[row][col] = rowSplit[col];
-						// System.out.println(cols[i]);
-					}
-					row++;
+					String[] rowSplit1 = line.split(",");
+					importColNum = rowSplit1.length;
+					importRowNum++;
 				}
 			}
 
-			System.out.println(data[3][3]);
+			// Array List to store rows that need to be removed
+			ArrayList<String> removeList = new ArrayList<String>();
+
+			// For loop to go through rows with empty fields and add them to the removeList
+			for (int i = 0; i < importRowNum; i++) {
+				String[] rowSplit = importData.get(i).split(",");
+				for (int j = 0; j < importColNum; j++) {
+					// System.out.println(rowSplit[1]);
+					if (rowSplit[j].contains("?")) {
+						removeList.add(importData.get(i));
+					}
+				}
+			}
+			// Remove all the rows marked for removal in the removeList
+			importData.removeAll(removeList);
+
+			// System.out.println(importData.get(8));
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
