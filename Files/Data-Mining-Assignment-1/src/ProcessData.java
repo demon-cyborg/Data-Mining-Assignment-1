@@ -49,13 +49,15 @@ public class ProcessData {
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < importData.size(); i++) {
+				
 				String[] columnSplit = ((String) importData.get(i)).split(",");
+				
 				// System.out.println(rowSplit[6]);
 				// if(!educationList.contains(rowSplit[4])) {
 				// educationList.add(columnSplit[4]);
 				if (i == 0) {
-					sb.append(columnSplit[4] + "\t");
-					sb.append(columnSplit[9] + "\t");
+					sb.append(columnSplit[4] + ",");
+					sb.append(columnSplit[9] + ",");
 					sb.append(columnSplit[14] + "\n");
 				} else {
 
@@ -71,13 +73,13 @@ public class ProcessData {
 						earnsNum = 1;
 					}
 					// }
-					sb.append(columnSplit[4] + "\t");
-					sb.append(genderNum + "\t");
+					sb.append(columnSplit[4] + ",");
+					sb.append(genderNum + ",");
 					sb.append(earnsNum + "\n");
 				}
+				
 			}
 			// sb.append(educationList+"\n");
-
 			br.write(sb.toString());
 			br.close();
 		} catch (IOException e) {
@@ -116,8 +118,8 @@ public class ProcessData {
 			
 			//System.out.println(readFile(testFileIn));
 			
-			//BufferedReader trainFileIn = new BufferedReader(new FileReader("adult.train.5fold.csv"));
-			//writeFile(readFile(trainFileIn),"train.csv");
+			BufferedReader trainFileIn = new BufferedReader(new FileReader("adult.train.5fold.csv"));
+			writeFile(readFile(trainFileIn),"train.csv");
 
 			BufferedReader testFileIn = new BufferedReader(new FileReader("adult.test.csv"));
 			writeFile(readFile(testFileIn),"test.csv");

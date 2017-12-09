@@ -21,38 +21,38 @@ public class KNN {
 			
 			try {
 				// readTrainData.readLine();
-				ArrayList<Integer> trainEducation = new ArrayList<Integer>();
-				ArrayList<Integer> trainGender = new ArrayList<Integer>();
-				ArrayList<Integer> trainEarns = new ArrayList<Integer>();
+				ArrayList<String> trainEducation = new ArrayList<String>();
+				ArrayList<String> trainGender = new ArrayList<String>();
+				ArrayList<String> trainEarns = new ArrayList<String>();
 				
 				String line;
 				
 				readTrainData.readLine();
 				while((line = readTrainData.readLine()) != null) {
-					String[] columnSplit = line.split("\\s+");
-					//trainEducation.add(Integer.parseInt(columnSplit[0]));
-					trainGender.add(Integer.parseInt(columnSplit[1]));
-					trainEarns.add(Integer.parseInt(columnSplit[2]));
+					String[] columnSplit = line.split(",");
+					trainEducation.add((columnSplit[0]));
+					trainGender.add((columnSplit[1]));
+					trainEarns.add((columnSplit[2]));
 					
 				}
 				
 				
 				ArrayList<Integer> testEducation = new ArrayList<Integer>();
-				ArrayList<Integer> testGender = new ArrayList<Integer>();
-				ArrayList<Integer> testEarns = new ArrayList<Integer>();
+				ArrayList<String> testGender = new ArrayList<String>();
+				ArrayList<String> testEarns = new ArrayList<String>();
 				
 				//String line;
 				readTestData.readLine();
 				while((line = readTestData.readLine()) != null) {
-					String[] columnSplit = line.split("\\s+");
-					testEducation.add(Integer.parseInt(columnSplit[0]));
-					testGender.add(Integer.parseInt(columnSplit[1]));
-					testEarns.add(Integer.parseInt(columnSplit[2]));
+					String[] columnSplit = line.split(",");
+					testEducation.add(Integer.parseInt(columnSplit[0].trim()));
+					testGender.add((columnSplit[1]));
+					testEarns.add((columnSplit[2]));
 					
 				}
 				
-				euclideanDist(trainEducation.get(0), testEducation.get(0), trainGender.get(0), testGender.get(0));
-				System.out.println(trainEducation);
+				//euclideanDist(trainEducation.get(0), testEducation.get(0), trainGender.get(0), testGender.get(0));
+				System.out.println(testGender);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
