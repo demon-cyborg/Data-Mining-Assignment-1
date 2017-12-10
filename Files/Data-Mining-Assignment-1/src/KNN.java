@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.lang.Math.pow;
 
@@ -42,6 +43,7 @@ public class KNN {
 				ArrayList<Integer> trainEducation = new ArrayList<Integer>();
 				ArrayList<Integer> trainGender = new ArrayList<Integer>();
 				ArrayList<Integer> trainEarns = new ArrayList<Integer>();
+				ArrayList<Integer> fold = new ArrayList<Integer>();
 
 				readTrainData.readLine();
 				while ((line = readTrainData.readLine()) != null) {
@@ -49,6 +51,7 @@ public class KNN {
 					trainEducation.add(Integer.parseInt(columnSplit[0].trim()));
 					trainGender.add(Integer.parseInt(columnSplit[1].trim()));
 					trainEarns.add(Integer.parseInt(columnSplit[2].trim()));
+					fold.add(Integer.parseInt(columnSplit[3].trim()));
 					// trainEducation.add((columnSplit[0].trim()));
 					// trainGender.add((columnSplit[1].trim()));
 					// trainEarns.add((columnSplit[2].trim()));
@@ -71,10 +74,58 @@ public class KNN {
 				}
 				// report("TestData", 20, testEducation, testGender, testEarns);
 
-				for (int i = 0; i < 10; i++) {
-					System.out.println(euclideanDist(trainEducation.get(i), testEducation.get(i), trainGender.get(i),
-							testGender.get(i)));
-				}
+				// Adds euclidean distances to arraylist
+				/*
+				 * ArrayList<Double> euclidean = new ArrayList<Double>(); for (int i = 0; i <
+				 * 10; i++) { euclidean.add(euclideanDist(trainEducation.get(i),
+				 * testEducation.get(i), trainGender.get(i), testGender.get(i))); }
+				 */
+
+				int bestNeighbours;
+				double bestAccuracy;
+
+				for (int i = 1; i < 6; i++) {
+					ArrayList<Integer> valFoldIndex = new ArrayList<Integer>();
+					ArrayList<Integer> trainFoldIndex = new ArrayList<Integer>();
+					for (int j = 0; j < fold.size(); j++) {
+
+						if (fold.get(j) == i) {
+							valFoldIndex.add(j);
+						} else {
+							trainFoldIndex.add(j);
+						}
+
+					}
+					// System.out.println(valFoldIndex);
+
+					// Adds euclidean distances to arraylist
+					ArrayList<Double> euclidean = new ArrayList<Double>();
+					for (int x = 0; x < valFoldIndex.size(); x++) {
+						int neighbours = 1;
+						for (int y = 0; y < trainFoldIndex.size(); y++) {
+							euclidean.add(euclideanDist(trainEducation.get(valFoldIndex.get(x)),
+									trainEducation.get(trainFoldIndex.get(y)), trainGender.get(valFoldIndex.get(x)),
+									trainGender.get(trainFoldIndex.get(y))));
+
+						}
+						//Gets indexes of smallest euclidean distances
+						ArrayList<Integer> smallestDistIndex = new ArrayList<Integer>();
+						ArrayList<Double> euclideanSorted = new ArrayList<>(euclidean);
+						Collections.sort(euclideanSorted);
+						// System.out.println(euclidean.get(0));
+						for (int k = 0; k < 3; k++) {
+							// euclidean.indexOf(euclideanSorted.get(k));
+							if (smallestDistIndex.contains(euclidean.indexOf(euclideanSorted.get(k)))) {
+								euclidean.remove(euclidean.indexOf(euclideanSorted.get(k)));
+							}
+
+							smallestDistIndex.add(euclidean.indexOf(euclideanSorted.get(k)));
+
+						}
+						System.out.println(smallestDistIndex);
+					}
+
+				} // end of run
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

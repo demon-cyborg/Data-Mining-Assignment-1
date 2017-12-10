@@ -50,7 +50,12 @@ public class ProcessData {
 				if (i == 0) {
 					sb.append(columnSplit[4] + ",");
 					sb.append(columnSplit[9] + ",");
-					sb.append(columnSplit[14] + "\n");
+					if (columnSplit.length == 16) {
+						sb.append(columnSplit[14] + ",");
+						sb.append(columnSplit[15] + "\n");
+					} else {
+						sb.append(columnSplit[14] + "\n");
+					}
 				} else {
 
 					if (columnSplit[9].contains("Male")) {
@@ -68,7 +73,12 @@ public class ProcessData {
 					// String edu = columnSplit[4].replaceAll("\\.0", "");
 					sb.append(columnSplit[4].replaceAll("\\.0", "") + ",");
 					sb.append(genderNum + ",");
-					sb.append(earnsNum + "\n");
+					if (columnSplit.length == 16) {
+						sb.append(earnsNum + ",");
+						sb.append(columnSplit[15] + "\n");
+					} else {
+						sb.append(earnsNum + "\n");
+					}
 				}
 
 			}
