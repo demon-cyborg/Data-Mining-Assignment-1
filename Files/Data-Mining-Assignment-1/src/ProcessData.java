@@ -30,7 +30,7 @@ public class ProcessData {
 		return importData;
 	}
 
-	public static void writeFile(ArrayList importData,String fileName) {
+	public static void writeFile(ArrayList importData, String fileName) {
 		int genderNum;
 		int earnsNum;
 
@@ -41,9 +41,9 @@ public class ProcessData {
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < importData.size(); i++) {
-				
+
 				String[] columnSplit = ((String) importData.get(i)).split(",");
-				
+
 				// System.out.println(rowSplit[6]);
 				// if(!educationList.contains(rowSplit[4])) {
 				// educationList.add(columnSplit[4]);
@@ -65,11 +65,12 @@ public class ProcessData {
 						earnsNum = 1;
 					}
 					// }
-					sb.append(columnSplit[4] + ",");
+					// String edu = columnSplit[4].replaceAll("\\.0", "");
+					sb.append(columnSplit[4].replaceAll("\\.0", "") + ",");
 					sb.append(genderNum + ",");
 					sb.append(earnsNum + "\n");
 				}
-				
+
 			}
 			// sb.append(educationList+"\n");
 			br.write(sb.toString());
@@ -84,7 +85,6 @@ public class ProcessData {
 
 		try {
 			// Reads the data from the file specified
-
 
 			/*
 			 * // Array List to store rows that need to be removed ArrayList<String>
@@ -107,14 +107,14 @@ public class ProcessData {
 			// ArrayList<Integer> genderList = new ArrayList<Integer>();
 			// ArrayList<Integer> earnsList = new ArrayList<Integer>();
 			// int educationNum;
-			
-			//System.out.println(readFile(testFileIn));
-			
+
+			// System.out.println(readFile(testFileIn));
+
 			BufferedReader trainFileIn = new BufferedReader(new FileReader("adult.train.5fold.csv"));
-			writeFile(readFile(trainFileIn),"train.csv");
+			writeFile(readFile(trainFileIn), "train.csv");
 
 			BufferedReader testFileIn = new BufferedReader(new FileReader("adult.test.csv"));
-			writeFile(readFile(testFileIn),"test.csv");
+			writeFile(readFile(testFileIn), "test.csv");
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
