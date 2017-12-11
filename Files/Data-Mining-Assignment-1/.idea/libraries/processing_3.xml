@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="processing-3">
+    <CLASSES>
+      <root url="file://C:/Program Files (x86)/processing-3.1" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/generated" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/dxf/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/io/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/net/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/pdf/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/serial/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/libraries/svg/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/modes/java/src" />
+      <root url="file://C:/Program Files (x86)/processing-3.1/tools/MovieMaker/src" />
+    </SOURCES>
+  </library>
+</component>
