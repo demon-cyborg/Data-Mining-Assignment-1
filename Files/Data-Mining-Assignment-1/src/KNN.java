@@ -16,54 +16,41 @@ import static java.lang.Math.pow;
 
 public class KNN {
 
-	public static void report(String name, int num, ArrayList<String> att1, ArrayList<String> att2,
-			ArrayList<String> att3) {
-		// Print Test of Training and Testing data, only displays 3 attributes - to test
-		// if ProcessData Works
-		System.out.println(name);
-		for (int i = 0; i < att1.size() && i < num; i++) {
-			System.out.println(i + ".\t\t" + att1.get(i) + "\t" + att2.get(i) + "\t" + att3.get(i));
-		}
-		System.out.println();
-	}
-
-	
-	public static double euclideanDist(int x1, int x2, int y1, int y2) {
+	// Calculates euclidian distance
+	public static double euclideanDist(int v1, int v2, int w1, int w2, int x1, int x2, int y1, int y2, int z1, int z2) {
 		double euclidean;
 
-		return euclidean = Math.sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2));
+		return euclidean = Math.sqrt(
+				pow((v1 - v2), 2) + pow((w1 - w2), 2) + pow((x1 - x2), 2) + pow((y1 - y2), 2) + pow((z1 - z2), 2));
+	}
+	
+	//Writes k-accuracy results to text file
+	public static void writeResults(ArrayList Attr1, ArrayList Attr2, int fold) throws IOException {
+		BufferedWriter bw;
+
+		bw = new BufferedWriter(new FileWriter("grid.results.txt", true));
+
+		bw.append("Fold " + fold + ":");
+		bw.newLine();
+		String entry = ("K, Accuracy");
+		bw.append(entry);
+		bw.newLine();
+
+		for (int i = 0; i < Attr1.size() && i < Attr2.size(); i++) {
+			entry = (Attr1.get(i) + ", " + Attr2.get(i));
+
+			bw.append(entry);
+			bw.newLine();
+
+		}
+		bw.newLine();
+		bw.close();
 	}
 
-	
-    public static void writeResults(ArrayList Attr1, ArrayList Attr2, int fold ) throws IOException {
-        BufferedWriter bw;
-
-        bw = new BufferedWriter(new FileWriter("grid.results.txt", true));
-        
-        bw.append("Fold "+fold+":");
-        bw.newLine();
-        String entry = ("K, Accuracy");
-        bw.append(entry);
-        bw.newLine();
-        
-        for (int i = 0; i < Attr1.size() && i < Attr2.size(); i++) {
-            entry = (Attr1.get(i) + ", " + Attr2.get(i));
-
-            bw.append(entry);
-            bw.newLine();
-
-        }
-        bw.newLine();
-        bw.close();
-    }
-	
-	
-	
-	
 	public static void main(String[] args) {
 
 		try {
-			//Reads the files created in ProcessData
+			// Reads the files created in ProcessData
 			BufferedReader readTrainData = new BufferedReader(new FileReader("train.csv"));
 			BufferedReader readTestData = new BufferedReader(new FileReader("test.csv"));
 
@@ -74,42 +61,55 @@ public class KNN {
 				ArrayList<Integer> trainEducation = new ArrayList<Integer>();
 				ArrayList<Integer> trainGender = new ArrayList<Integer>();
 				ArrayList<Integer> trainEarns = new ArrayList<Integer>();
+				ArrayList<Integer> trainWorkClass = new ArrayList<Integer>();
+				ArrayList<Integer> trainCapGain = new ArrayList<Integer>();
+				ArrayList<Integer> trainCapLoss = new ArrayList<Integer>();
 				ArrayList<Integer> fold = new ArrayList<Integer>();
-
+				
+				//Adds encoded attribute data to arraylists
 				readTrainData.readLine();
 				while ((line = readTrainData.readLine()) != null) {
 					String[] columnSplit = line.split(",");
 					trainEducation.add(Integer.parseInt(columnSplit[0].trim()));
 					trainGender.add(Integer.parseInt(columnSplit[1].trim()));
 					trainEarns.add(Integer.parseInt(columnSplit[2].trim()));
-					fold.add(Integer.parseInt(columnSplit[3].trim()));
+					trainWorkClass.add(Integer.parseInt(columnSplit[3].trim()));
+					trainCapGain.add(Integer.parseInt(columnSplit[4].trim()));
+					trainCapLoss.add(Integer.parseInt(columnSplit[5].trim()));
+					fold.add(Integer.parseInt(columnSplit[6].trim()));
 				}
 				// report("TrainData", 20, trainEducation, trainGender, trainEarns);
-				
-				//Testing data
+
+				// Testing data
 				String testLine;
 				ArrayList<Integer> testEducation = new ArrayList<Integer>();
 				ArrayList<Integer> testGender = new ArrayList<Integer>();
 				ArrayList<Integer> testEarns = new ArrayList<Integer>();
-
+				ArrayList<Integer> testWorkClass = new ArrayList<Integer>();
+				
+				//Adds encoded attribute data to arraylists
+				int testingSize = 0;
 				readTestData.readLine();
 				while ((testLine = readTestData.readLine()) != null) {
 					String[] columnSplit = testLine.split(",");
 					testEducation.add(Integer.parseInt((columnSplit[0].trim())));
 					testGender.add(Integer.parseInt((columnSplit[1].trim())));
 					testEarns.add(Integer.parseInt((columnSplit[2].trim())));
+					testWorkClass.add(Integer.parseInt((columnSplit[3].trim())));
+					testingSize++;
 				}
 				// report("TestData", 20, testEducation, testGender, testEarns);
 
 				int bestNeighbours;
 				double bestAccuracy;
-				
-				//For each run
+
+				// For each fold
 				for (int i = 1; i < 6; i++) {
 					ArrayList<Integer> valFoldIndex = new ArrayList<Integer>();
 					ArrayList<Integer> trainFoldIndex = new ArrayList<Integer>();
 					ArrayList<Integer> testFoldIndex = new ArrayList<Integer>();
 					
+					//Gets indexes for the validation and training data for each fold
 					for (int j = 0; j < fold.size(); j++) {
 
 						if (fold.get(j) == i) {
@@ -119,96 +119,97 @@ public class KNN {
 						}
 
 					}
-					//System.out.println(valFoldIndex);
+					//Splits the testing data into 5 folds
+					for (int j = (testingSize / 5) * i - 1; j < (testingSize / 5) * i; j++) {
+						testFoldIndex.add(j);
+					}
+					// System.out.println(valFoldIndex);
 
-					
-					
-					
 					// Adds euclidean distances to arraylist
 					ArrayList<Integer> earnsPredictionList = new ArrayList<Integer>();
 					ArrayList<Integer> earnsActualList = new ArrayList<Integer>();
-					
+
 					ArrayList<Double> accuracyList = new ArrayList<Double>();
 					ArrayList<Integer> kList = new ArrayList<Integer>();
-					//Number of neighbours
-					for(int k=1;k<40;k+=2) {
-					for (int x = 0; x < valFoldIndex.size(); x++) {
-						//ArrayList<Double> euclidean = new ArrayList<Double>();
-						HashMap<Integer, Double> euclideanHMap = new HashMap<Integer, Double>();
-						int neighbours = 1;
-						for (int y = 0; y < trainFoldIndex.size(); y++) {
-							euclideanHMap.put(y,euclideanDist(trainEducation.get(valFoldIndex.get(x)),
-									trainEducation.get(trainFoldIndex.get(y)), trainGender.get(valFoldIndex.get(x)),
-									trainGender.get(trainFoldIndex.get(y))));
-						}
-						
-						//System.out.println(x+" "+euclideanHMap);
-						
-						//https://stackoverflow.com/questions/8119366/sorting-hashmap-by-values
-						//Gets index of data with smallest distance
-						Map<Integer, Double> sortedMap = 
-								euclideanHMap.entrySet().stream()
-							    .sorted(Entry.comparingByValue())
-							    .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
-							                              (e1, e2) -> e1, LinkedHashMap::new));
-						
-						ArrayList<Integer> smallestDistIndex = new ArrayList<Integer>();
-						for (Entry<Integer, Double> entry : sortedMap.entrySet()){
-							smallestDistIndex.add(entry.getKey());
-						}
-						//System.out.println("Smallest indexes"+smallestDistIndex);
-						//System.out.println("validation:"+valFoldIndex.get(x));
-						
-						//check earns
-						ArrayList<Integer> earnValue = new ArrayList<Integer>();
-						
-						for(int a=0;a<k;a++) {
-							earnValue.add(trainEarns.get(smallestDistIndex.get(a)));
-						}
-						
-						int earnsPrediction;
-						if(Collections.frequency(earnValue, 0)>=(earnValue.size()/2)) {
-							earnsPrediction=0;
-						}
-						else {
-							earnsPrediction=1;
-						}
-						
-						
-						earnsPredictionList.add(earnsPrediction);
-						earnsActualList.add(trainEarns.get(valFoldIndex.get(x)));
-						
-					}//each validation data
-					
-					//Accuracy
-					double correct=0;
-					for(int x=0;x<earnsPredictionList.size();x++) {
-						if(earnsPredictionList.get(x)==earnsActualList.get(x)) {
-							correct++;
-						}
-					}
-					double accuracy = correct/earnsPredictionList.size();
+					// Goes through different number of neighbours from 1 to 39
+					for (int k = 1; k < 40; k += 2) {
+						for (int x = 0; x < valFoldIndex.size(); x++) {
+							HashMap<Integer, Double> euclideanHMap = new HashMap<Integer, Double>();
+							int neighbours = 1;
+							//Gets the euclidean distance between each validation data and all the training data in the fold
+							for (int y = 0; y < trainFoldIndex.size(); y++) {
+								euclideanHMap.put(y, euclideanDist(trainEducation.get(valFoldIndex.get(x)),
+										trainEducation.get(trainFoldIndex.get(y)), trainGender.get(valFoldIndex.get(x)),
+										trainGender.get(trainFoldIndex.get(y)), trainWorkClass.get(valFoldIndex.get(x)),
+										trainWorkClass.get(trainFoldIndex.get(y)),
+										trainCapGain.get(valFoldIndex.get(x)), trainCapGain.get(trainFoldIndex.get(y)),
+										trainCapLoss.get(valFoldIndex.get(x)),
+										trainCapLoss.get(trainFoldIndex.get(y))));
+							}
 
-					accuracyList.add(accuracy);
-					kList.add(k);
+							// System.out.println(x+" "+euclideanHMap);
+
+							// https://stackoverflow.com/questions/8119366/sorting-hashmap-by-values
+							// Sorts data from smallest distances to largest to get the indices
+							Map<Integer, Double> sortedMap = euclideanHMap.entrySet().stream()
+									.sorted(Entry.comparingByValue()).collect(Collectors.toMap(Entry::getKey,
+											Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+							ArrayList<Integer> smallestDistIndex = new ArrayList<Integer>();
+							for (Entry<Integer, Double> entry : sortedMap.entrySet()) {
+								smallestDistIndex.add(entry.getKey());
+							}
+							// System.out.println("Smallest indexes"+smallestDistIndex);
+							// System.out.println("validation:"+valFoldIndex.get(x));
+
+							// Gets earn values of closest neighbours
+							ArrayList<Integer> earnValue = new ArrayList<Integer>();
+							for (int a = 0; a < k; a++) {
+								earnValue.add(trainEarns.get(smallestDistIndex.get(a)));
+							}
+							
+							//Makes a prediction on earn value based on the most common occurence in its neighbours
+							int earnsPrediction;
+							if (Collections.frequency(earnValue, 0) >= (earnValue.size() / 2)) {
+								earnsPrediction = 0;
+							} else {
+								earnsPrediction = 1;
+							}
+
+							earnsPredictionList.add(earnsPrediction);
+							earnsActualList.add(trainEarns.get(valFoldIndex.get(x)));
+
+						} 
+
+						// Calculates accuracy
+						double correct = 0;
+						for (int x = 0; x < earnsPredictionList.size(); x++) {
+							if (earnsPredictionList.get(x) == earnsActualList.get(x)) {
+								correct++;
+							}
+						}
+						double accuracy = correct / earnsPredictionList.size();
+
+						accuracyList.add(accuracy);
+						kList.add(k);
+
+						// System.out.println("Fold "+i);
+						// System.out.println("Earns predictions: "+earnsPredictionList);
+						// System.out.println("Really earns: "+earnsActualList);
+						// System.out.println("Accuracy: " + accuracyList.get(accuracyList.size()-1));
+						// System.out.println("");
+					} // num of neighbours
 					
-					//System.out.println("Fold "+i);
-					//System.out.println("Earns predictions: "+earnsPredictionList);
-					//System.out.println("Really earns: "+earnsActualList);
-					//System.out.println("Accuracy: " + accuracyList.get(accuracyList.size()-1));
-					//System.out.println("");
-					}//num of neighbours
-					
-					writeResults(kList,accuracyList,i);
-					
-					//Best neighbours
-					int bestNumNeighbours=kList.get(accuracyList.indexOf(Collections.max(accuracyList)));
-					System.out.println("Best neighbours: " + bestNumNeighbours);
-					
-					
-					//TESTING DATA
-					
-					
+					//Writes results to grid.results file
+					writeResults(kList, accuracyList, i);
+
+					// Best neighbours & accuracy per fold
+					int bestNumNeighbours = kList.get(accuracyList.indexOf(Collections.max(accuracyList)));
+					System.out.println("Fold" + i + "-  Best neighbours: " + bestNumNeighbours + "	"
+							+ "Best accuracy: " + Collections.max(accuracyList));
+
+					// TESTING DATA
+
 				} // end of run
 
 			} catch (IOException e) {
