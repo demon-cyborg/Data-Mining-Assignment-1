@@ -70,11 +70,12 @@ public class ProcessData {
                 if (i == 0) {
                     sb.append(columnSplit[4] + ",");
                     sb.append(columnSplit[9] + ",");
+                    sb.append(columnSplit[14] + ",");
                     if (columnSplit.length == 16) {
-                        sb.append(columnSplit[14] + ",");
+                        sb.append(columnSplit[1] + ",");
                         sb.append(columnSplit[15] + "\n");
                     } else {
-                        sb.append(columnSplit[14] + "\n");
+                        sb.append(columnSplit[1] + "\n");
                     }
                 } else {
 
@@ -91,8 +92,8 @@ public class ProcessData {
                     }
 
                     if (
-                            columnSplit[2].contains("Private") ||
-                                    columnSplit[2].contains("Self-emp-not-inc")) {
+                            columnSplit[1].contains("Private") ||
+                                    columnSplit[1].contains("Self-emp-not-inc")) {
                         workClass = 0;
                     } else {
                         workClass = 1;
@@ -103,11 +104,12 @@ public class ProcessData {
                     // String edu = columnSplit[4].replaceAll("\\.0", "");
                     sb.append(columnSplit[4].replaceAll("\\.0", "") + ",");
                     sb.append(genderNum + ",");
+                    sb.append(earnsNum + ",");
                     if (columnSplit.length == 16) {
-                        sb.append(earnsNum + ",");
+                        sb.append(workClass + ",");
                         sb.append(columnSplit[15] + "\n");
                     } else {
-                        sb.append(earnsNum + "\n");
+                        sb.append(workClass + "\n");
                     }
                 }
 

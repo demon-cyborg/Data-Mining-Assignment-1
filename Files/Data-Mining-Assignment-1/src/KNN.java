@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,27 @@ public class KNN {
 	}
 
 	
+    public static void writeResults(ArrayList Attr1, ArrayList Attr2, int fold ) throws IOException {
+        BufferedWriter bw;
+
+        bw = new BufferedWriter(new FileWriter("grid.results.txt", true));
+        
+        bw.append("Fold "+fold+":");
+        bw.newLine();
+        String entry = ("K, Accuracy");
+        bw.append(entry);
+        bw.newLine();
+        
+        for (int i = 0; i < Attr1.size() && i < Attr2.size(); i++) {
+            entry = (Attr1.get(i) + ", " + Attr2.get(i));
+
+            bw.append(entry);
+            bw.newLine();
+
+        }
+        bw.newLine();
+        bw.close();
+    }
 	
 	
 	
@@ -85,6 +108,8 @@ public class KNN {
 				for (int i = 1; i < 6; i++) {
 					ArrayList<Integer> valFoldIndex = new ArrayList<Integer>();
 					ArrayList<Integer> trainFoldIndex = new ArrayList<Integer>();
+					ArrayList<Integer> testFoldIndex = new ArrayList<Integer>();
+					
 					for (int j = 0; j < fold.size(); j++) {
 
 						if (fold.get(j) == i) {
@@ -157,7 +182,6 @@ public class KNN {
 					
 					//Accuracy
 					double correct=0;
-		
 					for(int x=0;x<earnsPredictionList.size();x++) {
 						if(earnsPredictionList.get(x)==earnsActualList.get(x)) {
 							correct++;
@@ -175,9 +199,16 @@ public class KNN {
 					//System.out.println("");
 					}//num of neighbours
 					
+					writeResults(kList,accuracyList,i);
+					
 					//Best neighbours
 					int bestNumNeighbours=kList.get(accuracyList.indexOf(Collections.max(accuracyList)));
 					System.out.println("Best neighbours: " + bestNumNeighbours);
+					
+					
+					//TESTING DATA
+					
+					
 				} // end of run
 
 			} catch (IOException e) {
