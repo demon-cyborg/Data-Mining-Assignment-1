@@ -29,6 +29,7 @@ public class KNN {
 	public static void main(String[] args) {
 
 		try {
+			//Reads the files created in ProcessData
 			BufferedReader readTrainData = new BufferedReader(new FileReader("train.csv"));
 			BufferedReader readTestData = new BufferedReader(new FileReader("test.csv"));
 
@@ -83,7 +84,8 @@ public class KNN {
 
 				int bestNeighbours;
 				double bestAccuracy;
-
+				
+				//For each run
 				for (int i = 1; i < 6; i++) {
 					ArrayList<Integer> valFoldIndex = new ArrayList<Integer>();
 					ArrayList<Integer> trainFoldIndex = new ArrayList<Integer>();
@@ -96,30 +98,38 @@ public class KNN {
 						}
 
 					}
-					// System.out.println(valFoldIndex);
+					//System.out.println(valFoldIndex);
 
+					
+					
+					
 					// Adds euclidean distances to arraylist
-					ArrayList<Double> euclidean = new ArrayList<Double>();
+					
 					for (int x = 0; x < valFoldIndex.size(); x++) {
+						ArrayList<Double> euclidean = new ArrayList<Double>();
 						int neighbours = 1;
 						for (int y = 0; y < trainFoldIndex.size(); y++) {
 							euclidean.add(euclideanDist(trainEducation.get(valFoldIndex.get(x)),
 									trainEducation.get(trainFoldIndex.get(y)), trainGender.get(valFoldIndex.get(x)),
 									trainGender.get(trainFoldIndex.get(y))));
-
 						}
+						
+						System.out.println(x+" "+euclidean);
+						
+						
+						//NEEDS WORK
 						//Gets indexes of smallest euclidean distances
 						ArrayList<Integer> smallestDistIndex = new ArrayList<Integer>();
 						ArrayList<Double> euclideanSorted = new ArrayList<>(euclidean);
 						Collections.sort(euclideanSorted);
-						// System.out.println(euclidean.get(0));
-						for (int k = 0; k < 3; k++) {
+						//System.out.println(euclideanSorted);
+						//ArrayList<Double> euclideanCopy = new ArrayList<>(euclidean);
+						for (int k = 0; k < 4; k++) {
 							// euclidean.indexOf(euclideanSorted.get(k));
-							if (smallestDistIndex.contains(euclidean.indexOf(euclideanSorted.get(k)))) {
-								euclidean.remove(euclidean.indexOf(euclideanSorted.get(k)));
-							}
-
-							smallestDistIndex.add(euclidean.indexOf(euclideanSorted.get(k)));
+							smallestDistIndex.add(euclidean.indexOf(euclideanSorted.get(k))+k);
+							//if (smallestDistIndex.contains(euclidean.indexOf(euclideanSorted.get(k)))) {
+								euclidean.remove(smallestDistIndex.get(k));
+							//}
 
 						}
 						System.out.println(smallestDistIndex);
