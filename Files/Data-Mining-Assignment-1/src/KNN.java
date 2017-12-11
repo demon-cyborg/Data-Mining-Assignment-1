@@ -9,6 +9,7 @@ import static java.lang.Math.pow;
 
 public class KNN {
 
+
     public static void report(String name, int num, ArrayList<String> att1, ArrayList<String> att2,
                               ArrayList<String> att3) {
         // Print Test of Training and Testing data, only displays 3 attributes - to test
@@ -18,6 +19,8 @@ public class KNN {
             System.out.println(i + ".\t\t" + att1.get(i) + "\t" + att2.get(i) + "\t" + att3.get(i));
         }
         System.out.println();
+
+
     }
 
     public static double euclideanDist(int x1, int x2, int y1, int y2) {
@@ -114,7 +117,7 @@ public class KNN {
                                     trainGender.get(trainFoldIndex.get(y))));
                         }
 
-                        System.out.println("Entry " + x + " " + euclidean);
+                        System.out.println("\tEntry " + x + " " + euclidean);
 
 
                         //NEEDS WORK
@@ -132,11 +135,13 @@ public class KNN {
                             //}
 
                         }
-                        System.out.println("Smallest Distance Set "+smallestDistIndex);
+                        ProcessData.WriteResults(euclideanSorted, euclidean);
+                        System.out.println("\tSmallest Distance Set " + smallestDistIndex);
                         System.out.println();
                     }
 
                 } // end of run
+
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
