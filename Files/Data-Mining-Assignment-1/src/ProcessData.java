@@ -51,6 +51,8 @@ public class ProcessData {
     public static void writeFile(ArrayList importData, String fileName) {
         int genderNum;
         int earnsNum;
+        int workClass;
+
 
         BufferedWriter br;
         try {
@@ -87,6 +89,16 @@ public class ProcessData {
                     } else {
                         earnsNum = 1;
                     }
+
+                    if (
+                            columnSplit[2].contains("Private") ||
+                                    columnSplit[2].contains("Self-emp-not-inc")) {
+                        workClass = 0;
+                    } else {
+                        workClass = 1;
+                    }
+
+
                     // }
                     // String edu = columnSplit[4].replaceAll("\\.0", "");
                     sb.append(columnSplit[4].replaceAll("\\.0", "") + ",");
@@ -103,10 +115,14 @@ public class ProcessData {
             // sb.append(educationList+"\n");
             br.write(sb.toString());
             br.close();
-        } catch (IOException e) {
+        } catch (
+                IOException e)
+
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
     }
 
     public static void main(String[] args) {
